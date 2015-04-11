@@ -101,13 +101,13 @@ int32_t dt_bstring_ref(dt_value *v, void *data) {
 }
 
 dt_value *dt_stack_push_back(dt_value *v, dt_value *to_push) {
-  if (to_push->type == ARRAY) {
+  if (to_push->type == STACK) {
     return NULL;
   }
   dt_value *res = v;
-  if (v->type != ARRAY) {
+  if (v->type != STACK) {
     res = dt_init();
-    res->type = ARRAY;
+    res->type = STACK;
     res->len_or_val = 1;
     res->next = v;
   }
@@ -121,13 +121,13 @@ dt_value *dt_stack_push_back(dt_value *v, dt_value *to_push) {
 }
 
 dt_value *dt_stack_push(dt_value *v, dt_value *to_push) {
-  if (to_push->type == ARRAY) {
+  if (to_push->type == STACK) {
     return NULL;
   }
   dt_value *res = v;
-  if (v->type != ARRAY) {
+  if (v->type != STACK) {
     res = dt_init();
-    res->type = ARRAY;
+    res->type = STACK;
     res->len_or_val = 1;
     res->next = v;
   }
@@ -138,7 +138,7 @@ dt_value *dt_stack_push(dt_value *v, dt_value *to_push) {
 }
 
 dt_value *dt_stack_pop(dt_value *v) {
-  if (v->type != ARRAY || v->len_or_val <= 0) {
+  if (v->type != STACK || v->len_or_val <= 0) {
     return NULL;
   }
   dt_value *result = v->next;
@@ -153,14 +153,14 @@ dt_value *dt_stack_pop(dt_value *v) {
 }
 
 dt_value *dt_stack_peek(dt_value *v) {
-  if (v->type != ARRAY || v->len_or_val <= 0) {
+  if (v->type != STACK || v->len_or_val <= 0) {
     return NULL;
   }
   return v->next;
 }
 
 dt_value *dt_stack_peek_at(dt_value *v, int n) {
-  if (v->type != ARRAY || v->len_or_val < n) {
+  if (v->type != STACK || v->len_or_val < n) {
     return NULL;
   }
   dt_value *res;

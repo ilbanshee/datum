@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-typedef enum dt_type_t { UNKNOWN, INTEGER, STRING, BSTRING, ARRAY } dt_type;
+typedef enum dt_type_t { UNKNOWN, INTEGER, STRING, BSTRING, STACK } dt_type;
 
 typedef struct dt_value_t {
   dt_type type;
