@@ -6,7 +6,7 @@ static void dt_free_pointers(dt_value *v);
 
 dt_value *dt_init() {
   dt_value *v = calloc(1, sizeof(dt_value));
-  v->type = UNKNOW;
+  v->type = UNKNOWN;
   v->len_or_val = -1;
   v->data = NULL;
   v->next = NULL;
@@ -32,6 +32,8 @@ static void dt_free_pointers(dt_value *v) {
 }
 
 dt_type dt_type_get(dt_value *v) { return v->type; }
+
+bool dt_is_know(dt_value *v) { return v->type != UNKNOWN; }
 
 dt_value *dt_int(dt_value *v, int32_t val) {
   v->type = INTEGER;

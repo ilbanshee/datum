@@ -1,8 +1,9 @@
 #ifndef _DATUM_H_
 #define _DATUM_H_
 #include <stdint.h>
+#include <stdbool.h>
 
-typedef enum dt_type_t { UNKNOW, INTEGER, STRING, BSTRING, ARRAY } dt_type;
+typedef enum dt_type_t { UNKNOWN, INTEGER, STRING, BSTRING, ARRAY } dt_type;
 
 typedef struct dt_value_t {
   dt_type type;
@@ -15,6 +16,7 @@ dt_value *dt_init();
 void dt_free(dt_value *v);
 
 dt_type dt_type_get(dt_value *v);
+bool dt_is_know(dt_value *v);
 
 dt_value *dt_int(dt_value *v, int32_t val);
 int32_t dt_int_get(dt_value *v);
