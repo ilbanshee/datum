@@ -144,7 +144,10 @@ dt_value *dt_stack_pop(dt_value *v) {
   dt_value *result = v->next;
   if (v->len_or_val > 1) {
     v->next = v->next->next;
+  } else {
+    v->next = NULL;
   }
+  result->next = NULL;
   v->len_or_val = v->len_or_val - 1;
   return result;
 }

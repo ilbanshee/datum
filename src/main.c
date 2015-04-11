@@ -28,6 +28,7 @@ int main() {
   dt_value *tmp = dt_stack_pop(v2);
   while (tmp != NULL) {
     printf("n is %d\n", dt_int_get(tmp));
+    dt_free(tmp);
     tmp = dt_stack_pop(v2);
   }
 
