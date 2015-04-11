@@ -25,7 +25,16 @@ int main() {
   v2 = dt_stack_push(v2, v1);
   v2 = dt_stack_push(v2, v3);
 
-  dt_value *tmp = dt_stack_pop(v2);
+  dt_value *tmp = dt_stack_peek(v2);
+  printf("peek at 1 is %d\n", dt_int_get(tmp));
+  tmp = dt_stack_peek_at(v2, 2);
+  printf("peek at 2 is %d\n", dt_int_get(tmp));
+  tmp = dt_stack_peek_at(v2, 3);
+  printf("peek at 3 is %d\n", dt_int_get(tmp));
+  tmp = dt_stack_peek_at(v2, 4);
+  printf("peek at 4 is null: %d\n", tmp == NULL);
+  
+  tmp = dt_stack_pop(v2);
   while (tmp != NULL) {
     printf("n is %d\n", dt_int_get(tmp));
     dt_free(tmp);

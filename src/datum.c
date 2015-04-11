@@ -138,7 +138,7 @@ dt_value *dt_stack_push(dt_value *v, dt_value *to_push) {
 }
 
 dt_value *dt_stack_pop(dt_value *v) {
-  if (v->type != ARRAY || v->len_or_val == 0) {
+  if (v->type != ARRAY || v->len_or_val <= 0) {
     return NULL;
   }
   dt_value *result = v->next;
@@ -150,4 +150,24 @@ dt_value *dt_stack_pop(dt_value *v) {
   result->next = NULL;
   v->len_or_val = v->len_or_val - 1;
   return result;
+}
+
+dt_value *dt_stack_peek(dt_value *v) {
+  if (v->type != ARRAY || v->len_or_val <= 0) {
+    return NULL;
+  }
+  return v->next;
+}
+
+dt_value *dt_stack_peek_at(dt_value *v, int n) {
+  if (v->type != ARRAY || v->len_or_val < n) {
+    return NULL;
+  }
+  dt_value *res;
+  res = v;
+  while(n > 0) {
+    res = res->next;
+    n--;
+  }
+  return res;
 }
