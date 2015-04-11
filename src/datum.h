@@ -26,8 +26,8 @@ char *dt_string_copy(dt_value *v);
 char *dt_string_ref(dt_value *v);
 
 dt_value *dt_bstring(dt_value *v, void *data, int32_t size);
-int32_t dt_bstring_copy(dt_value *v, void *data);
-int32_t dt_bstring_ref(dt_value *, void *data);
+int32_t dt_bstring_copy(dt_value *v, void **data);
+int32_t dt_bstring_ref(dt_value *, void **data);
 
 dt_value *dt_stack_push(dt_value *v, dt_value *to_push);
 dt_value *dt_stack_push_back(dt_value *v, dt_value *to_push);

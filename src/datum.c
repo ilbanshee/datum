@@ -83,20 +83,20 @@ dt_value *dt_bstring(dt_value *v, void *data, int32_t size) {
 
   return v;
 }
-int32_t dt_bstring_copy(dt_value *v, void *data) {
-  if (v->type != BSTRING || data != NULL) {
+int32_t dt_bstring_copy(dt_value *v, void **data) {
+  if (v->type != BSTRING || *data != NULL) {
     return -1;
   }
-  data = malloc(v->len_or_val);
-  memcpy(data, v->data, v->len_or_val);
+  *data = malloc(v->len_or_val);
+  memcpy(*data, v->data, v->len_or_val);
   return v->len_or_val;
 }
 
-int32_t dt_bstring_ref(dt_value *v, void *data) {
-  if (v->type != BSTRING || data != NULL) {
+int32_t dt_bstring_ref(dt_value *v, void **data) {
+  if (v->type != BSTRING || *data != NULL) {
     return -1;
   }
-  data = v->data;
+  *data = v->data;
   return v->len_or_val;
 }
 
