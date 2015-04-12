@@ -100,12 +100,25 @@ int32_t dt_bstring_ref(dt_value *v, void **data) {
   return v->len_or_val;
 }
 
+int32_t dt_stack_size(dt_value *v) {
+  if (v->type != STACK) {
+    return -1;
+  }
+  return v->len_or_val;
+}
+
 dt_value *dt_stack_push_back(dt_value *v, dt_value *to_push) {
   if (to_push->type == STACK) {
     return NULL;
   }
   dt_value *res = v;
-  if (v->type != STACK) {
+  if (v == NULL || v->type == UNKNOWN) {
+    res = dt_init();
+    res->type = STACK;
+    res->len_or_val = 0;
+    res->next = NULL;
+    dt_free(v);
+  } else if (v != NULL && v->type != STACK) {
     res = dt_init();
     res->type = STACK;
     res->len_or_val = 1;
@@ -125,7 +138,13 @@ dt_value *dt_stack_push(dt_value *v, dt_value *to_push) {
     return NULL;
   }
   dt_value *res = v;
-  if (v->type != STACK) {
+  if (v == NULL || v->type == UNKNOWN) {
+    res = dt_init();
+    res->type = STACK;
+    res->len_or_val = 0;
+    res->next = NULL;
+    dt_free(v);
+  } else if (v != NULL && v->type != STACK) {
     res = dt_init();
     res->type = STACK;
     res->len_or_val = 1;

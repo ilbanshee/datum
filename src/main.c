@@ -53,51 +53,96 @@ void test_null() {
   assert(tmp == NULL);
   assert(dt_bstring_copy(val, tmp) == -1);
   assert(tmp == NULL);
+  
+  assert(dt_stack_pop(val) == NULL);
+  assert(dt_stack_peek(val) == NULL);
+
   dt_free(val);
+}
+
+void test_stack_init_with_value() {
+  dt_value *stack = dt_init();
+  dt_value *v0 = dt_init();
+  dt_value *v1 = dt_init();
+  dt_value *v2 = dt_init();
+  dt_value *v3 = dt_init();
+  dt_value *v4 = dt_init();
+  dt_value *v5 = dt_init();
+
+  stack = dt_int(stack, 1);
+  v0 = dt_int(v0, 2);
+  v1 = dt_int(v1, 3);
+  v2 = dt_int(v2, 5);
+  v3 = dt_int(v3, 7);
+  v4 = dt_int(v4, 9);
+  v5 = dt_int(v5, 11);
+
+  stack = dt_stack_push(stack, v0);
+  stack = dt_stack_push(stack, v1);
+  stack = dt_stack_push(stack, v2);
+  stack = dt_stack_push(stack, v3);
+  stack = dt_stack_push(stack, v4);
+  stack = dt_stack_push(stack, v5);
+
+  assert(dt_stack_size(stack) == 7);
+
+  dt_value *tmp = dt_stack_pop(stack);
+  int counter = 0;
+  int to_check[] = { 11, 9, 7, 5, 3, 2, 1 };
+  while (tmp != NULL) {
+    assert(to_check[counter++] == dt_int_get(tmp));
+    dt_free(tmp);
+    tmp = dt_stack_pop(stack);
+  }
+  assert(counter == 7);
+  
+  dt_free(stack);
+}
+
+
+void test_stack_init_without_value() {
+  dt_value *stack = dt_init();
+  dt_value *v0 = dt_init();
+  dt_value *v1 = dt_init();
+  dt_value *v2 = dt_init();
+  dt_value *v3 = dt_init();
+  dt_value *v4 = dt_init();
+  dt_value *v5 = dt_init();
+
+  v0 = dt_int(v0, 2);
+  v1 = dt_int(v1, 3);
+  v2 = dt_int(v2, 5);
+  v3 = dt_int(v3, 7);
+  v4 = dt_int(v4, 9);
+  v5 = dt_int(v5, 11);
+
+  stack = dt_stack_push(stack, v0);
+  stack = dt_stack_push(stack, v1);
+  stack = dt_stack_push(stack, v2);
+  stack = dt_stack_push(stack, v3);
+  stack = dt_stack_push(stack, v4);
+  stack = dt_stack_push(stack, v5);
+
+  assert(dt_stack_size(stack) == 6);
+  
+  dt_value *tmp = dt_stack_pop(stack);
+  int counter = 0;
+  int to_check[] = { 11, 9, 7, 5, 3, 2 };
+  while (tmp != NULL) {
+    assert(to_check[counter++] == dt_int_get(tmp));
+    dt_free(tmp);
+    tmp = dt_stack_pop(stack);
+  }
+  assert(counter == 6);
+
+  dt_free(stack);
 }
 
 int main() {
   test_type_change();
   test_null();
-
-  dt_value *v1 = dt_init();
-  v1 = dt_int(v1, 64);
-  v1 = dt_string(v1, "test");
-
-  printf("Sizeof datum: %lu\n", sizeof(dt_value));
-  printf("Type of datum is %d and char data is: \"%s\"\n", dt_type_get(v1),
-         dt_string_ref(v1));
-
-  v1 = dt_int(v1, 32);
-  printf("Type of datum is %d and int data is: \"%d\"\n", dt_type_get(v1),
-         dt_int_get(v1));
-
-  dt_value *v2 = dt_init();
-  v2 = dt_int(v2, 23);
-
-  dt_value *v3 = dt_init();
-  v3 = dt_int(v3, 231);
-
-  v2 = dt_stack_push(v2, v1);
-  v2 = dt_stack_push(v2, v3);
-
-  dt_value *tmp = dt_stack_peek(v2);
-  printf("peek at 1 is %d\n", dt_int_get(tmp));
-  tmp = dt_stack_peek_at(v2, 2);
-  printf("peek at 2 is %d\n", dt_int_get(tmp));
-  tmp = dt_stack_peek_at(v2, 3);
-  printf("peek at 3 is %d\n", dt_int_get(tmp));
-  tmp = dt_stack_peek_at(v2, 4);
-  printf("peek at 4 is null: %d\n", tmp == NULL);
-
-  tmp = dt_stack_pop(v2);
-  while (tmp != NULL) {
-    printf("n is %d\n", dt_int_get(tmp));
-    dt_free(tmp);
-    tmp = dt_stack_pop(v2);
-  }
-
-  dt_free(v2);
+  test_stack_init_with_value();
+  test_stack_init_without_value();
 
   return EXIT_SUCCESS;
 }
