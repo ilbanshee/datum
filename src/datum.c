@@ -165,7 +165,7 @@ dt_value *dt_stack_peek_at(dt_value *v, int n) {
   }
   dt_value *res;
   res = v;
-  while(n > 0) {
+  while (n > 0) {
     res = res->next;
     n--;
   }

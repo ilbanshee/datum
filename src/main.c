@@ -20,28 +20,45 @@ void test_type_change() {
   val = dt_string(val, "othertest");
   assert(dt_type_get(val) == STRING);
   assert(strcmp(dt_string_ref(val), "othertest") == 0);
-  char* tmp = dt_string_copy(val);
+  char *tmp = dt_string_copy(val);
   assert(strcmp(dt_string_ref(val), tmp) == 0);
 
-  char binary[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  char binary[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   val = dt_bstring(val, binary, 10);
   assert(dt_type_get(val) == BSTRING);
-  void* btmp = NULL;
-  void* ctmp = NULL;
+  void *btmp = NULL;
+  void *ctmp = NULL;
   dt_bstring_copy(val, &ctmp);
-  char to_compare[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  char to_compare[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
   assert(dt_bstring_ref(val, &btmp) == 10);
   assert(memcmp(btmp, to_compare, 6) == 0);
   assert(memcmp(ctmp, to_compare, 6) == 0);
-  
+
   dt_free(val);
   free(tmp);
   free(ctmp);
 }
 
+void test_null() {
+  dt_value *val = dt_init();
+  assert(!dt_is_know(val));
+
+  assert(dt_int_get(val) == INT32_MIN);
+
+  assert(dt_string_ref(val) == NULL);
+  assert(dt_string_copy(val) == NULL);
+
+  void *tmp = NULL;
+  assert(dt_bstring_ref(val, tmp) == -1);
+  assert(tmp == NULL);
+  assert(dt_bstring_copy(val, tmp) == -1);
+  assert(tmp == NULL);
+}
+
 int main() {
   test_type_change();
-  
+  test_null();
+
   dt_value *v1 = dt_init();
   v1 = dt_int(v1, 64);
   v1 = dt_string(v1, "test");
@@ -71,7 +88,7 @@ int main() {
   printf("peek at 3 is %d\n", dt_int_get(tmp));
   tmp = dt_stack_peek_at(v2, 4);
   printf("peek at 4 is null: %d\n", tmp == NULL);
-  
+
   tmp = dt_stack_pop(v2);
   while (tmp != NULL) {
     printf("n is %d\n", dt_int_get(tmp));
