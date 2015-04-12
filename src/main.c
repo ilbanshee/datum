@@ -53,6 +53,7 @@ void test_null() {
   assert(tmp == NULL);
   assert(dt_bstring_copy(val, tmp) == -1);
   assert(tmp == NULL);
+  dt_free(val);
 }
 
 int main() {
