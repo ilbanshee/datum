@@ -99,6 +99,31 @@ void test_stack_init_with_value() {
   dt_free(stack);
 }
 
+void test_stack_init_with_null() {
+  dt_value *stack = NULL;
+  dt_value *v0 = dt_init();
+  dt_value *v1 = dt_init();
+
+  v0 = dt_int(v0, 2);
+  v1 = dt_int(v1, 3);
+
+  stack = dt_stack_push(stack, v0);
+  stack = dt_stack_push(stack, v1);
+
+  assert(dt_stack_size(stack) == 2);
+
+  dt_value *tmp = dt_stack_pop(stack);
+  int counter = 0;
+  int to_check[] = { 3, 2 };
+  while (tmp != NULL) {
+    assert(to_check[counter++] == dt_int_get(tmp));
+    dt_free(tmp);
+    tmp = dt_stack_pop(stack);
+  }
+  assert(counter == 2);
+  
+  dt_free(stack);
+}
 
 void test_stack_init_without_value() {
   dt_value *stack = dt_init();
@@ -138,11 +163,120 @@ void test_stack_init_without_value() {
   dt_free(stack);
 }
 
+void test_stack_pushback_1() {
+  dt_value *stack = dt_init();
+  dt_value *v0 = dt_init();
+  dt_value *v1 = dt_init();
+  dt_value *v2 = dt_init();
+  dt_value *v3 = dt_init();
+  dt_value *v4 = dt_init();
+  dt_value *v5 = dt_init();
+
+  stack = dt_int(stack, 1);
+  v0 = dt_int(v0, 2);
+  v1 = dt_int(v1, 3);
+  v2 = dt_int(v2, 5);
+  v3 = dt_int(v3, 7);
+  v4 = dt_int(v4, 9);
+  v5 = dt_int(v5, 11);
+
+  stack = dt_stack_push(stack, v0);
+  stack = dt_stack_push_back(stack, v1);
+  stack = dt_stack_push_back(stack, v2);
+  stack = dt_stack_push(stack, v3);
+  stack = dt_stack_push_back(stack, v4);
+  stack = dt_stack_push(stack, v5);
+
+  assert(dt_stack_size(stack) == 7);
+
+  dt_value *tmp = dt_stack_pop(stack);
+  int counter = 0;
+  int to_check[] = { 11, 7, 2, 1, 3, 5, 9 };
+  while (tmp != NULL) {
+    assert(to_check[counter++] == dt_int_get(tmp));
+    dt_free(tmp);
+    tmp = dt_stack_pop(stack);
+  }
+  assert(counter == 7);
+  
+  dt_free(stack);
+}
+
+void test_stack_pushback_2() {
+  dt_value *stack = dt_init();
+  dt_value *v0 = dt_init();
+  dt_value *v1 = dt_init();
+  dt_value *v2 = dt_init();
+  dt_value *v3 = dt_init();
+  dt_value *v4 = dt_init();
+  dt_value *v5 = dt_init();
+
+  stack = dt_int(stack, 1);
+  v0 = dt_int(v0, 2);
+  v1 = dt_int(v1, 3);
+  v2 = dt_int(v2, 5);
+  v3 = dt_int(v3, 7);
+  v4 = dt_int(v4, 9);
+  v5 = dt_int(v5, 11);
+
+  stack = dt_stack_push_back(stack, v0);
+  stack = dt_stack_push_back(stack, v1);
+  stack = dt_stack_push_back(stack, v2);
+  stack = dt_stack_push(stack, v3);
+  stack = dt_stack_push_back(stack, v4);
+  stack = dt_stack_push(stack, v5);
+
+  assert(dt_stack_size(stack) == 7);
+
+  dt_value *tmp = dt_stack_pop(stack);
+  int counter = 0;
+  int to_check[] = { 11, 7, 1, 2, 3, 5, 9 };
+  while (tmp != NULL) {
+    assert(to_check[counter++] == dt_int_get(tmp));
+    dt_free(tmp);
+    tmp = dt_stack_pop(stack);
+  }
+  assert(counter == 7);
+  
+  dt_free(stack);
+}
+
+void test_stack_peek() {
+  dt_value *stack = NULL;
+  dt_value *v0 = dt_init();
+  dt_value *v1 = dt_init();
+
+  v0 = dt_int(v0, 2);
+  v1 = dt_int(v1, 3);
+
+  stack = dt_stack_push(stack, v0);
+  stack = dt_stack_push(stack, v1);
+
+  assert(dt_stack_size(stack) == 2);
+  assert(3 == dt_int_get(dt_stack_peek(stack)));
+  dt_value *tmp = dt_stack_pop(stack);
+  assert(2 == dt_int_get(dt_stack_peek(stack)));
+  int counter = 0;  
+  int to_check[] = { 3, 2 };
+  while (tmp != NULL) {
+    assert(to_check[counter++] == dt_int_get(tmp));
+    dt_free(tmp);
+    tmp = dt_stack_pop(stack);
+  }
+  assert(counter == 2);
+  
+  dt_free(stack);
+}
+
 int main() {
   test_type_change();
   test_null();
   test_stack_init_with_value();
   test_stack_init_without_value();
-
+  test_stack_init_with_null();
+  test_stack_pushback_1();
+  test_stack_pushback_2();
+  test_stack_peek();
+  
   return EXIT_SUCCESS;
 }
